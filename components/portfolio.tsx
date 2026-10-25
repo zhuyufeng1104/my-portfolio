@@ -8,7 +8,7 @@ import {
   useState,
   useSyncExternalStore,
 } from "react";
-import { projects, type Project } from "@/lib/projects";
+import { assetPath, projects, type Project } from "@/lib/projects";
 const Language = createContext({ zh: false, toggle: () => {} });
 function subscribeLanguage(callback: () => void) {
   window.addEventListener("storage", callback);
@@ -134,7 +134,13 @@ export function Home() {
   return (
     <main>
       <section className="hero">
-        <div className="hero-art" aria-hidden />
+        <div
+          className="hero-art"
+          aria-hidden
+          style={{
+            backgroundImage: `linear-gradient(0deg,#080b0bea 0%,transparent 60%),linear-gradient(90deg,#05090888,transparent),url('${assetPath("/images/hero.svg")}')`,
+          }}
+        />
         <div className="hero-grain" aria-hidden />
         <div className="hero-top">
           <span>INDEPENDENT AI VISUAL CREATOR</span>
@@ -198,8 +204,8 @@ export function Home() {
           </h2>
           <p className="about-copy">
             {zh
-              ? "我是一名 AI 影像创作者，在电影叙事与生成式技术之间寻找新的表达。从一束光、一个念头，到完整的视觉世界，探索 AI Film、商业广告、演唱会视觉与创意影像的更多可能。"
-              : "I’m an AI visual creator working at the intersection of cinematic storytelling and generative technology. From a fragment of light to an entire imagined world, I explore new possibilities in film, commercial imagery, live visuals, and creative experiments."}
+              ? "我是一名 AI 影像创作者、商业广告导演与演唱会视觉设计师，在电影叙事与生成式技术之间寻找新的表达。从一束光、一个念头，到完整的视觉世界，探索 AI Film、商业广告、演唱会视觉与创意影像的更多可能。"
+              : "I’m an AI visual creator, commercial director, and concert visual designer working at the intersection of cinematic storytelling and generative technology. From a fragment of light to an entire imagined world, I explore new possibilities in film, commercial imagery, live visuals, and creative experiments."}
           </p>
           <div className="disciplines">
             {[

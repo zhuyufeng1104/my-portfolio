@@ -1,10 +1,13 @@
+export const assetPath = (path: string) =>
+  `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}${path}`;
+
 export const projects = [
   {
     slug: "afterlight",
     title: "AFTERLIGHT",
     category: "AI Film",
     year: "2026",
-    image: "/images/afterlight.svg",
+    image: assetPath("/images/afterlight.svg"),
     zh: "余光",
     description: [
       "A speculative journey through the last light of an imagined world. An exploration of memory, atmosphere, and synthetic landscapes.",
@@ -16,7 +19,7 @@ export const projects = [
     title: "LIQUID FORM",
     category: "Commercial",
     year: "2026",
-    image: "/images/liquid-form.svg",
+    image: assetPath("/images/liquid-form.svg"),
     zh: "流体形态",
     description: [
       "A self-initiated product-film study in light, texture, and motion. No brand or client affiliation.",
@@ -28,7 +31,7 @@ export const projects = [
     title: "ECHOES",
     category: "Live Visuals",
     year: "2025",
-    image: "/images/echoes.svg",
+    image: assetPath("/images/echoes.svg"),
     zh: "回响",
     description: [
       "An imagined stage environment where sound becomes architecture. A concept for immersive concert visuals.",
@@ -40,7 +43,7 @@ export const projects = [
     title: "OTHER SUN",
     category: "Creative",
     year: "2025",
-    image: "/images/other-sun.svg",
+    image: assetPath("/images/other-sun.svg"),
     zh: "另一个太阳",
     description: [
       "An abstract visual poem about unfamiliar places and the quiet possibility of another reality.",

@@ -40,3 +40,17 @@ npm run build
 ### 云环境安装
 
 若默认 npm 缓存目录不可写，使用 `npm ci --cache /tmp/portfolio-npm-cache`。每个云任务已有独立环境，直接使用现有检出目录，无需新建 worktree。服务进程不随环境快照保留，需重新执行 `npm run dev`。
+
+### 在线审核预览
+
+GitHub Pages 预览由 `.github/workflows/preview.yml` 在 `feat/portfolio-review` 推送时构建，执行 lint、生产静态导出、类型检查，再部署并检查公开页面。预览不合并 `main`；演示作品及占位邮箱也会公开展示。工作流部署失败时，以 GitHub Actions 的实际结果为准。
+
+手动验证相同的静态构建：
+
+```bash
+PORTFOLIO_STATIC_EXPORT=1 PORTFOLIO_BASE_PATH=/my-portfolio npm run build
+```
+
+普通 `npm run build` 仍生成可以用 `npm start` 启动的 Next.js 网站。静态产物在 `out/`，图片和主视觉兼容 GitHub Pages 的仓库子路径。
+
+若 Pages 尚未启用，工作流仍构建并保存静态产物，但跳过公开部署。在仓库 Settings → Pages 中选择 **GitHub Actions** 作为 Source，再重新运行 `Portfolio preview` 工作流。当前云端 GitHub 集成没有启用 Pages 所需的权限，不能自动完成此设置。
