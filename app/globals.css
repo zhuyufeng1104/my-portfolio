@@ -113,8 +113,9 @@ p {
   inset: 0;
   background:
     linear-gradient(0deg, #080b0bea 0%, transparent 60%),
-    linear-gradient(90deg, #05090888, transparent),
-    url("/images/hero.svg") center/cover;
+    linear-gradient(90deg, #05090888, transparent), #141811;
+  background-position: center;
+  background-size: cover;
   animation: arrive 1.6s ease-out both;
 }
 .hero-grain {

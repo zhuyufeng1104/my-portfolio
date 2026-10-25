@@ -41,16 +41,28 @@ npm run build
 
 若默认 npm 缓存目录不可写，使用 `npm ci --cache /tmp/portfolio-npm-cache`。每个云任务已有独立环境，直接使用现有检出目录，无需新建 worktree。服务进程不随环境快照保留，需重新执行 `npm run dev`。
 
-### 在线审核预览
+### GitHub Pages 正式部署
 
-GitHub Pages 预览由 `.github/workflows/preview.yml` 在 `feat/portfolio-review` 推送时构建，执行 lint、生产静态导出、类型检查，再部署并检查公开页面。预览不合并 `main`；演示作品及占位邮箱也会公开展示。工作流部署失败时，以 GitHub Actions 的实际结果为准。
+`.github/workflows/preview.yml` 在 `main` 更新时自动构建并部署；PR 只构建检查，不进入 `github-pages` 环境。保留现有环境部署分支限制、审核要求及其他保护规则。只有 `main` 的 push 或手动运行可以部署。
 
-手动验证相同的静态构建：
+工作流分为 `build` 和 `deploy`：构建任务仅有 `contents: read` 权限；部署任务拥有 `pages: write` 和 `id-token: write`，并使用受保护的 `github-pages` 环境。Pages 未启用或配置错误会明确失败，不会显示跳过部署的成功状态。
+
+部署使用 `PORTFOLIO_STATIC_EXPORT=1`（Next.js `output: export`、尾斜线 URL）和 `PORTFOLIO_BASE_PATH=/my-portfolio`。页面、作品图及主视觉资源都带仓库子路径。图片关闭在线优化，产物由 GitHub Pages 直接托管。
+
+本地复现：
 
 ```bash
+npm ci
+npm run lint
 PORTFOLIO_STATIC_EXPORT=1 PORTFOLIO_BASE_PATH=/my-portfolio npm run build
+npm run typecheck
+node scripts/check-static-export.mjs
 ```
 
-普通 `npm run build` 仍生成可以用 `npm start` 启动的 Next.js 网站。静态产物在 `out/`，图片和主视觉兼容 GitHub Pages 的仓库子路径。
+普通 `npm run build` 仍生成可用 `npm start` 启动的 Next.js 网站。
 
-若 Pages 尚未启用，工作流仍构建并保存静态产物，但跳过公开部署。在仓库 Settings → Pages 中选择 **GitHub Actions** 作为 Source，再重新运行 `Portfolio preview` 工作流。当前云端 GitHub 集成没有启用 Pages 所需的权限，不能自动完成此设置。
+合并部署修复 PR 到 `main` 后，在 Actions 中查看 **Deploy portfolio to GitHub Pages**：`build` 和 `deploy` 都应通过；如环境要求人工批准，在部署任务中按现有流程批准，不修改保护规则。Settings → Pages 的 Source 应为 **GitHub Actions**。
+
+部署完成后打开 https://zhuyufeng1104.github.io/my-portfolio/ ，检查首页、作品分类、项目详情、海报及手机导航。直接打开 `/my-portfolio/works/` 和 `/my-portfolio/projects/afterlight/` 后刷新，确认正常。浏览器 Network 中的 JS、CSS 和图片应返回 200，资源路径应以 `/my-portfolio/` 开头。
+
+需要手动重试时，从 `main` 分支运行该工作流。修复 PR 合并前的检查不会发布网站。
